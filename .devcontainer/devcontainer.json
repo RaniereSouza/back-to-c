@@ -2,7 +2,7 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node
 {
 	"name": "Back to C (studies)",
-	// "image": "mcr.microsoft.com/devcontainers/javascript-node:0-16",
+	// "image": "mcr.microsoft.com/devcontainers/cpp:bullseye",
 	
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"dockerComposeFile": "docker-compose.yaml",
@@ -21,14 +21,16 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "yarn install",
+	// "postCreateCommand": "make",
 
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"ms-vscode.cpptools",
 				"ms-vscode.makefile-tools",
-				"ms-vscode.cpptools"
+				"shd101wyy.markdown-preview-enhanced",
+				"pkief.material-icon-theme"
 			]
 		}
 	},
