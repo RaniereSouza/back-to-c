@@ -10,5 +10,6 @@
   "terminal.integrated.cursorStyle": "underline",
   "terminal.integrated.defaultLocation": "editor",
   "terminal.integrated.fontFamily": "TerminessTTF NFM, Fira Code",
-  "terminal.integrated.fontSize": 27
+  "terminal.integrated.fontSize": 27,
+  "makefile.makefilePath": "./code/Makefile"
 }
