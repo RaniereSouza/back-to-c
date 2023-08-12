@@ -1,6 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-#include "fibonacci.c"
+#include "fibonacci.h"
 
 void main() {
   int input = -3;

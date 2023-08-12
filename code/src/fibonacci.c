@@ -1,11 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef __FIBONACCI_MODULE__
-#define __FIBONNACI_MODULE__
-/**
- * Fibonacci with recursion
- */
+#include "fibonacci.h"
+
 int fibonacci(int n) {
   if (n < 0) {
     fprintf(
@@ -19,8 +16,4 @@ int fibonacci(int n) {
   return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
-/**
- * TODO: Fibonnaci with memoization
- */
 // int fibonacci_memo(int n) { ... }
-#endif

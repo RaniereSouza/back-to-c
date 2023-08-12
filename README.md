@@ -10,8 +10,8 @@ Devcontainer environment that I made to get back in contact with C and C++: expe
 
 ## How to run
 - In the command line, `cd` into the `code` folder
-- To just compile the C code from `src/main.c`, run `make compile_main`
-- To run the C code in `src/main.c`, run `make run_main`
-- To clean up the generated files, run `make clean`
+- To just compile the C code from `src/main.c` and all other C files, run `make compile_all`
+- To run the C code in `src/main.c` (as well as link all object files needed for that), run `make run_main`
+- To clean up all generated files, run `make clean`
 > Obs. 1: The contents generated from compilation will be in the `dist` folder
-> Obs. 2: If you want the commands in the Makefile to be echoed, pass the argument `V=1` to the `make` command for verbosity (`make V=1 (...)` or `make (...) V=1`, for example)
+> Obs. 2: If you want the commands in the Makefile to be shown in the command line, pass the argument `V=1` to the `make` command for verbosity (`make V=1 (...)` or `make (...) V=1`, for example)
