@@ -3,12 +3,12 @@
 
 #include "fibonacci.h"
 
-void main() {
+int main() {
   int input = -3;
   int result = fibonacci(input);
 
-  if (result < 0) exit(EXIT_FAILURE);
+  if (result < 0) return EXIT_FAILURE;
 
   printf("the #%d Fibonacci number is the number %d.\n", input, result);
-  exit(EXIT_SUCCESS);
+  return EXIT_SUCCESS;
 }
