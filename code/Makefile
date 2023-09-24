@@ -17,7 +17,7 @@ help:
 run_main: compile_all link_all ## Execute the entire pipeline to run the code in the src/main.c file
 	./dist/main
 
-compile_all: ## Compile all C files inside of the src/ directory into a respective object file inside of the dist/ directory
+compile_all: ## Compile all C files inside of src/ into a respective object file inside of dist/
 	for source_file in src/*.c; do\
 		make dist/$$(echo $${source_file} | grep -Po 'src/\K[\w]*(?#.c)').o -s;\
 	done
@@ -31,7 +31,27 @@ create_dist: ## Create the dist/ directory if it doesn't exist
 link_all: ## Link all generated object files inside of the dist/ directory into a main executable file
 	$(C_DEV_COMPILER) $$(echo dist/*.o) -o dist/main
 
-clean: ## Clean up all files generated inside of the dist/ directory
+clean_dist: ## Clean up all files generated inside of the dist/ directory
 	rm -rf dist/
+
+install_deps: ## Install into the deps/ folder the remote dependencies from URLs listed in the deps.txt file
+	mkdir -p deps
+	while read -r deps_line; do\
+		wget -O $$(\
+			echo $${deps_line} \
+			| sed -n 's/^\(.*\) | \(.*\)/ deps\/\1.tar.gz/p'\
+		) $$(\
+			echo $${deps_line} \
+			| sed -n 's/^\(.*\) | \(.*\)/ \2/p'\
+		);\
+	done < deps.txt
+	for tar_file in deps/*.tar.gz; do\
+		tar -xvf $${tar_file} -C deps && rm $${tar_file};\
+	done
+
+clean_deps: ## Clean up all dependencies downloaded to the deps/ directory
+	rm -rf deps/
+
+clean_all: clean_dist clean_deps ## Clean all generated files and downloaded dependencies
 
 $(V).SILENT:
