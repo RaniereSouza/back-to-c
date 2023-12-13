@@ -2,6 +2,8 @@ C_COMPILER := gcc -std=c18
 C_DEBUG_FLAGS := -Wall -Wextra -g
 C_DEV_COMPILER := $(C_COMPILER) $(C_DEBUG_FLAGS)
 
+UNITY_SRC_DIR := deps/Unity-*/src
+
 ### Helper definition to print all documented commands based on https://diamantidis.github.io/tips/2020/07/01/list-makefile-targets 
 .DEFAULT_GOAL := help
 .PHONY: help
@@ -52,6 +54,19 @@ install_deps: ## Install into the deps/ folder the remote dependencies from URLs
 clean_deps: ## Clean up all dependencies downloaded to the deps/ directory
 	rm -rf deps/
 
-clean_all: clean_dist clean_deps ## Clean all generated files and downloaded dependencies
+run_all_tests: $(UNITY_SRC_DIR)/unity.c ## Run all ThrowTheSwitch/Unity test files in the tests/ directory
+	for test_file in tests/*.test.c; do\
+		$(C_DEV_COMPILER) \
+		-include $(UNITY_SRC_DIR)/unity.c \
+		-include src/$$(echo $${test_file} | grep -Po 'tests/\K[\w]*(?#.c)').c \
+		-o tests/$$(echo $${test_file} | grep -Po 'tests/\K[\w]*(?#.c)').test.out \
+		$${test_file};\
+		./tests/$$(echo $${test_file} | grep -Po 'tests/\K[\w]*(?#.c)').test.out;\
+	done
+
+clean_tests: ## Clean up all output files in the tests/ directory
+	rm -rf tests/*.test.out
+
+clean_all: clean_dist clean_tests clean_deps ## Clean all generated files and downloaded dependencies
 
 $(V).SILENT:
