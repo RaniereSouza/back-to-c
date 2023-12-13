@@ -5,7 +5,7 @@ void setUp(void) {}
 
 void tearDown(void) {}
 
-void test_function_should_return_one(void) {
+void it_should_return_one(void) {
   // Arrange
   int input1 = 0; int input2 = 1;
   // Act
@@ -18,6 +18,6 @@ void test_function_should_return_one(void) {
 
 int main(void) {
   UNITY_BEGIN();
-  RUN_TEST(test_function_should_return_one);
+  RUN_TEST(it_should_return_one);
   return UNITY_END();
 }
