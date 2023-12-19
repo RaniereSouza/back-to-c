@@ -37,7 +37,7 @@ void it_should_not_accept_negative_input(void) {
   // Act
   int result1 = fibonacci(input1);
   // Assert
-  TEST_ASSERT_EQUAL_INT(-1, result1);
+  TEST_ASSERT_EQUAL_INT(INVALID_INPUT_ERRNO, result1);
 }
 
 int main(void) {

@@ -10,7 +10,7 @@ int fibonacci(int n) {
       "argument for Fibonacci should be a positive integer, received %d.\n",
       n
     );
-    return -1;
+    return INVALID_INPUT_ERRNO;
   }
   if ((n == 0) || (n == 1)) return 1;
   return fibonacci(n - 1) + fibonacci(n - 2);

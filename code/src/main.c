@@ -10,7 +10,7 @@ int main() {
   scanf("%d", &input);
 
   int result = fibonacci(input);
-  if (result < 0) return EXIT_FAILURE;
+  if (result == INVALID_INPUT_ERRNO) return EXIT_FAILURE;
 
   printf("the #%d Fibonacci number is the number %d.\n", input, result);
   return EXIT_SUCCESS;
