@@ -43,8 +43,7 @@ link_all: ## Link all generated object files inside of the dist/ directory into 
 clean_dist: ## Clean up all files generated inside of the dist/ directory
 	rm -rf $(BUILD_DIR)/
 
-install_deps: ## Install into the deps/ folder the remote dependencies from URLs listed in the deps.txt file
-	mkdir -p $(DEPS_DIR)
+install_deps: create_deps ## Install into the deps/ folder the remote dependencies from URLs listed in the deps.txt file
 	while read -r deps_line; do\
 		wget -O $$(\
 			echo $${deps_line} \
@@ -57,6 +56,9 @@ install_deps: ## Install into the deps/ folder the remote dependencies from URLs
 	for tar_file in $(DEPS_DIR)/*.tar.gz; do\
 		tar -xvf $${tar_file} -C $(DEPS_DIR) && rm $${tar_file};\
 	done
+
+create_deps: ## Create the deps/ directory if it doesn't exist
+	mkdir -p $(DEPS_DIR)
 
 clean_deps: ## Clean up all dependencies downloaded to the deps/ directory
 	rm -rf $(DEPS_DIR)/
