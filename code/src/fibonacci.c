@@ -7,7 +7,7 @@ int fibonacci(int n) {
   if (n < 0) {
     fprintf(
       stderr,
-      "argument for Fibonacci should be a positive integer, received %d.\n",
+      "[ERROR] argument for Fibonacci should be a positive integer, received %d.\n",
       n
     );
     return INVALID_INPUT_ERRNO;
