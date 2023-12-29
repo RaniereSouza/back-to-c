@@ -1,4 +1,4 @@
-#include "../deps/Unity-2.5.2/src/unity.h"
+#include "../deps/unity_testing_library/src/unity.h"
 #include "../src/fibonacci.h"
 
 void setUp(void) {}

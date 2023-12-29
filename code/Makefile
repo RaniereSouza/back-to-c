@@ -6,7 +6,7 @@ CODE_DIR := src
 BUILD_DIR := dist
 DEPS_DIR := deps
 TESTS_DIR := tests
-UNITY_SRC_DIR := $(DEPS_DIR)/Unity-*/src
+UNITY_SRC_DIR := $(DEPS_DIR)/unity_testing_library/src
 
 DEPS_LIST_FILE := deps.txt
 UNITY_MAIN_FILE := $(UNITY_SRC_DIR)/unity.c
@@ -54,7 +54,8 @@ install_deps: create_deps ## Install into the deps/ folder the remote dependenci
 		);\
 	done < $(DEPS_LIST_FILE)
 	for tar_file in $(DEPS_DIR)/*.tar.gz; do\
-		tar -xvf $${tar_file} -C $(DEPS_DIR) && rm $${tar_file};\
+		tar -xvf $${tar_file} -C $(DEPS_DIR) --one-top-level --strip-components=1 \
+		&& rm $${tar_file};\
 	done
 
 create_deps: ## Create the deps/ directory if it doesn't exist
