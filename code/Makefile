@@ -73,6 +73,9 @@ run_all_tests: $(UNITY_MAIN_FILE) ## Run all ThrowTheSwitch/Unity test files in 
 		$${test_file};\
 		./$(TESTS_DIR)/$$(echo $${test_file} | grep -Po '$(TESTS_DIR)/\K[\w]*(?#.c)').test.out;\
 	done
+#	for test_output_file in $(TESTS_DIR)/*.test.out; do\
+#		./$(TESTS_DIR)/$${test_output_file};\
+#	done
 
 clean_tests: ## Clean up all output files in the tests/ directory
 	rm -rf $(TESTS_DIR)/*.test.out

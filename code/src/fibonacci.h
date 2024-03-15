@@ -8,10 +8,10 @@
 /**
  * Fibonacci with recursion
  */
-int fibonacci(int n);
+int fibonacci_rec(int n);
 
 /**
- * TODO: Fibonnaci with memoization
+ * Fibonnaci with memoization
  */
-// int fibonacci_memo(int n);
+int fibonacci(int n);
 #endif
