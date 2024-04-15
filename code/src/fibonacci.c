@@ -17,11 +17,10 @@ int fibonacci_rec(int n) {
   return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
-int fib_memo_rec(int n, IntArray *memo) {
-  if (int_array_get(n, memo) < 0) {
-    int_array_push(fib_memo_rec(n - 1, memo) + fib_memo_rec(n - 2, memo), memo);
+int __fib_memo_rec(int n, IntArray *memo) {
+  if (n >= memo->len) {
+    int_array_push(__fib_memo_rec(n - 1, memo) + __fib_memo_rec(n - 2, memo), memo);
   }
-  // printf(">>> %d\n", int_array_get(n, memo));
   return int_array_get(n, memo);
 }
 
@@ -40,5 +39,5 @@ int fibonacci(int n) {
   int_array_push(1, &memo);
 
   if ((n == 0) || (n == 1)) return int_array_get(n, &memo);
-  return fib_memo_rec(n, &memo);
+  return __fib_memo_rec(n, &memo);
 }
