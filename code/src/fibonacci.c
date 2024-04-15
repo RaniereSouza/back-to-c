@@ -14,7 +14,7 @@ int fibonacci_rec(int n) {
     return INVALID_INPUT_ERRNO;
   }
   if ((n == 0) || (n == 1)) return 1;
-  return fibonacci(n - 1) + fibonacci(n - 2);
+  return fibonacci_rec(n - 1) + fibonacci_rec(n - 2);
 }
 
 int __fib_memo_rec(int n, IntArray *memo) {
@@ -24,7 +24,7 @@ int __fib_memo_rec(int n, IntArray *memo) {
   return int_array_get(n, memo);
 }
 
-int fibonacci(int n) {
+int fibonacci_memo(int n) {
   if (n < 0) {
     fprintf(
       stderr,

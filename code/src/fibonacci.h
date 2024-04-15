@@ -13,5 +13,5 @@ int fibonacci_rec(int n);
 /**
  * Fibonnaci with memoization
  */
-int fibonacci(int n);
+int fibonacci_memo(int n);
 #endif
