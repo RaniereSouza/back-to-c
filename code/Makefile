@@ -1,3 +1,6 @@
+SHELL := /bin/bash
+MAKEFLAGS += --no-print-directory
+
 C_COMPILER := gcc -std=c18
 C_DEBUG_FLAGS := -Wall -Wextra -g
 C_DEV_COMPILER := $(C_COMPILER) $(C_DEBUG_FLAGS)
@@ -11,7 +14,7 @@ UNITY_SRC_DIR := $(DEPS_DIR)/unity_testing_library/src
 DEPS_LIST_FILE := deps.txt
 UNITY_MAIN_FILE := $(UNITY_SRC_DIR)/unity.c
 
-### Helper definition to print all documented commands based on https://diamantidis.github.io/tips/2020/07/01/list-makefile-targets 
+#>> Helper definition to print all documented commands (based on https://diamantidis.github.io/tips/2020/07/01/list-makefile-targets)
 .DEFAULT_GOAL := help
 .PHONY: help
 
@@ -21,7 +24,7 @@ help:
 	| sed -n 's/^\(.*\): \(.*\)##\(.*\)/  \1##←\3/p' \
 	| column -t -s '##'
 	echo "To document a command, just add a ## comment at the end of the target's line, after the prerequisites"
-### End of helper definition to print all documented commands
+#<< Helper definition to print all documented commands [END]
 
 run_main: compile_all link_all ## Execute the entire pipeline to run the code in the src/main.c file
 	./$(BUILD_DIR)/main
@@ -31,6 +34,7 @@ compile_all: ## Compile all C files inside of src/ into a respective object file
 		make $(BUILD_DIR)/$$(echo $${source_file} | grep -Po '$(CODE_DIR)/\K[\w]*(?#.c)').o -s;\
 	done
 
+### TODO: the target below doesn't have its documentation shown anymore, gotta fix this
 $(BUILD_DIR)/%.o: $(CODE_DIR)/%.c create_dist ## Compile the src/<name>.c file into the dist/<name>.o file
 	$(C_DEV_COMPILER) -c $< -o $@
 
@@ -64,18 +68,27 @@ create_deps: ## Create the deps/ directory if it doesn't exist
 clean_deps: ## Clean up all dependencies downloaded to the deps/ directory
 	rm -rf $(DEPS_DIR)/
 
-run_all_tests: $(UNITY_MAIN_FILE) ## Run all ThrowTheSwitch/Unity test files in the tests/ directory
+include_dynamic_array: $(CODE_DIR)/dynamic_array.c
+	echo "-include $(CODE_DIR)/dynamic_array.c"
+
+include_fibonacci: $(CODE_DIR)/fibonacci.c
+	echo "$(shell $(MAKE) include_dynamic_array) -include $(CODE_DIR)/fibonacci.c"
+
+$(TESTS_DIR)/%.test.c: $(CODE_DIR)/%.c $(UNITY_MAIN_FILE)
+	$(C_DEV_COMPILER) \
+	-include $(UNITY_MAIN_FILE) \
+	$(shell $(MAKE) include_$*) \
+	-o $(TESTS_DIR)/$*.test.out \
+	$@
+
+test_%: $(TESTS_DIR)/%.test.c $(UNITY_MAIN_FILE) ## Run tests in tests/<name>.test.c for src/<name>.c
+	./$(TESTS_DIR)/$*.test.out
+
+### TODO: run_all_tests doesn't work with the verbosity ("V=1") turned on, gotta fix this
+run_all_tests: $(UNITY_MAIN_FILE) ## Run all test files in the tests/ directory
 	for test_file in $(TESTS_DIR)/*.test.c; do\
-		$(C_DEV_COMPILER) \
-		-include $(UNITY_MAIN_FILE) \
-		-include $(CODE_DIR)/$$(echo $${test_file} | grep -Po '$(TESTS_DIR)/\K[\w]*(?#.c)').c \
-		-o $(TESTS_DIR)/$$(echo $${test_file} | grep -Po '$(TESTS_DIR)/\K[\w]*(?#.c)').test.out \
-		$${test_file};\
-		./$(TESTS_DIR)/$$(echo $${test_file} | grep -Po '$(TESTS_DIR)/\K[\w]*(?#.c)').test.out;\
+		$(MAKE) test_$$(basename $${test_file} .test.c);\
 	done
-#	for test_output_file in $(TESTS_DIR)/*.test.out; do\
-#		./$(TESTS_DIR)/$${test_output_file};\
-#	done
 
 clean_tests: ## Clean up all output files in the tests/ directory
 	rm -rf $(TESTS_DIR)/*.test.out
