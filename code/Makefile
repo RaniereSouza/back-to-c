@@ -74,14 +74,14 @@ include_dynamic_array: $(CODE_DIR)/dynamic_array.c
 include_fibonacci: $(CODE_DIR)/fibonacci.c
 	echo "$(shell $(MAKE) include_dynamic_array) -include $(CODE_DIR)/fibonacci.c"
 
-$(TESTS_DIR)/%.test.c: $(UNITY_MAIN_FILE) $(CODE_DIR)/%.c
+$(TESTS_DIR)/%.test.out: $(UNITY_MAIN_FILE) $(TESTS_DIR)/%.test.c
 	$(C_DEV_COMPILER) \
 	-include $(UNITY_MAIN_FILE) \
 	$(shell $(MAKE) include_$*) \
 	-o $(TESTS_DIR)/$*.test.out \
-	$@
+	$(TESTS_DIR)/$*.test.c
 
-test_%: $(UNITY_MAIN_FILE) $(TESTS_DIR)/%.test.c ## Run tests in tests/<name>.test.c for src/<name>.c
+test_%: $(CODE_DIR)/%.c $(TESTS_DIR)/%.test.out ## Use test_<name> to run tests in tests/<name>.test.c for src/<name>.c
 	./$(TESTS_DIR)/$*.test.out
 
 ### TODO: run_all_tests doesn't work with the verbosity ("V=1") turned on, gotta fix this
