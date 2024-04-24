@@ -9,7 +9,12 @@ CODE_DIR := src
 BUILD_DIR := dist
 DEPS_DIR := deps
 TESTS_DIR := tests
+
 UNITY_SRC_DIR := $(DEPS_DIR)/unity_testing_library/src
+RAYLIB_SRC_DIR := $(DEPS_DIR)/raylib_5/src
+RAYLIB_LIB_DIR := $(DEPS_DIR)/raylib_5/lib
+
+RAYLIB_LIB_PATH_VAR := LD_LIBRARY_PATH=$(RAYLIB_LIB_DIR)
 
 DEPS_LIST_FILE := deps.txt
 UNITY_MAIN_FILE := $(UNITY_SRC_DIR)/unity.c
@@ -28,6 +33,17 @@ help:
 
 run_main: compile_all link_all ## Execute the entire pipeline to run the code in the src/main.c file
 	./$(BUILD_DIR)/main
+
+run_main_with_raylib: compile_all compile_raylib_lib
+	$(C_DEV_COMPILER) -L $(RAYLIB_LIB_DIR) $$(echo $(BUILD_DIR)/*.o) -o $(BUILD_DIR)/main_with_raylib -lraylib
+	$(RAYLIB_LIB_PATH_VAR) ./$(BUILD_DIR)/main_with_raylib
+
+compile_raylib_lib: $(RAYLIB_SRC_DIR)/Makefile
+	mkdir -p $(RAYLIB_LIB_DIR)
+	$(MAKE) -C $(RAYLIB_SRC_DIR) GRAPHICS=GRAPHICS_API_OPENGL_11 RAYLIB_RELEASE_PATH=../lib RAYLIB_LIBTYPE=SHARED
+
+clean_raylib_lib:
+	rm -rf $(RAYLIB_LIB_DIR)/
 
 compile_all: ## Compile all C files inside of src/ into a respective object file inside of dist/
 	for source_file in $(CODE_DIR)/*.c; do\
