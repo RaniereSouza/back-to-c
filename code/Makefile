@@ -13,6 +13,7 @@ TESTS_DIR := tests
 UNITY_SRC_DIR := $(DEPS_DIR)/unity_testing_library/src
 RAYLIB_SRC_DIR := $(DEPS_DIR)/raylib_5/src
 RAYLIB_LIB_DIR := $(DEPS_DIR)/raylib_5/lib
+RAYGUI_SRC_DIR := $(DEPS_DIR)/raygui_4/src
 
 RAYLIB_LIB_PATH_VAR := LD_LIBRARY_PATH=$(RAYLIB_LIB_DIR)
 
@@ -34,16 +35,33 @@ help:
 run_main: compile_all link_all ## Execute the entire pipeline to run the code in the src/main.c file
 	./$(BUILD_DIR)/main
 
-run_main_with_raylib: compile_all compile_raylib_lib
-	$(C_DEV_COMPILER) -L $(RAYLIB_LIB_DIR) $$(echo $(BUILD_DIR)/*.o) -o $(BUILD_DIR)/main_with_raylib -lraylib
+run_main_with_raylib: $(RAYLIB_LIB_DIR)/libraylib.so $(RAYLIB_LIB_DIR)/libraygui.so compile_all
+	$(C_DEV_COMPILER) -L $(RAYLIB_LIB_DIR) \
+	$$(echo $(BUILD_DIR)/*.o) -o $(BUILD_DIR)/main_with_raylib \
+	-lraylib -lraygui
 	$(RAYLIB_LIB_PATH_VAR) ./$(BUILD_DIR)/main_with_raylib
 
-compile_raylib_lib: $(RAYLIB_SRC_DIR)/Makefile
+$(RAYLIB_LIB_DIR)/libraylib.so: $(RAYLIB_SRC_DIR)/Makefile
 	mkdir -p $(RAYLIB_LIB_DIR)
 	$(MAKE) -C $(RAYLIB_SRC_DIR) GRAPHICS=GRAPHICS_API_OPENGL_11 RAYLIB_RELEASE_PATH=../lib RAYLIB_LIBTYPE=SHARED
 
 clean_raylib_lib:
 	rm -rf $(RAYLIB_LIB_DIR)/
+
+$(RAYLIB_LIB_DIR)/libraygui.so: $(RAYGUI_SRC_DIR)/raygui.h $(RAYLIB_LIB_DIR)/libraylib.so
+	cp $(RAYGUI_SRC_DIR)/raygui.h $(RAYLIB_SRC_DIR)/raygui.h
+	cp $(RAYLIB_SRC_DIR)/raygui.h $(RAYLIB_SRC_DIR)/raygui.c
+	$(C_DEV_COMPILER) -L $(RAYLIB_LIB_DIR) \
+	-o $(RAYLIB_LIB_DIR)/libraygui.so $(RAYLIB_SRC_DIR)/raygui.c \
+	-shared -fpic -DRAYGUI_IMPLEMENTATION -lraylib \
+	-lGL -lm -lpthread -ldl -lrt -lX11
+
+clean_raygui:
+	rm -f $(RAYLIB_LIB_DIR)/libraygui.so
+	rm -f $(RAYLIB_SRC_DIR)/raygui.c
+	rm -f $(RAYLIB_SRC_DIR)/raygui.h
+
+clean_all_raylib: clean_raygui clean_raylib_lib
 
 compile_all: ## Compile all C files inside of src/ into a respective object file inside of dist/
 	for source_file in $(CODE_DIR)/*.c; do\

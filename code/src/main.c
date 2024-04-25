@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // #include "fibonacci.h"
 //
@@ -17,17 +18,40 @@
 // }
 
 #include "../deps/raylib_5/src/raylib.h"
+#include "../deps/raylib_5/src/raygui.h"
+
+#define MAX_STRING_SIZE 255
 
 int main(void) {
-  InitWindow(800, 450, "First successful window created!");
+  // CONFIG
+  int fps = 60;
+  int windowWidth = 800;
+  int windowHeight = 450;
+  Color windowBgColor = RAYWHITE;
+  Color textDefaultColor = GRAY;
 
-  while (!WindowShouldClose()) {
-    BeginDrawing();
-      ClearBackground(RAYWHITE);
-      DrawText("Hello, Raylib 5!", 320, 200, 20, GRAY);
-    EndDrawing();
-  }
+  // STATE
+  int count = 0;
+  char countStr[3];
+  snprintf(countStr, sizeof(countStr), "%d", count);
+  char buttonMessageBase[MAX_STRING_SIZE] = "CLICK COUNT: ";
+  char buttonMessage[MAX_STRING_SIZE] = "";
 
+  // GUI
+  SetTargetFPS(fps);
+  InitWindow(windowWidth, windowHeight, "First successful window created!");
+    while (!WindowShouldClose()) {
+      BeginDrawing();
+        ClearBackground(windowBgColor);
+        DrawText("Hello, Raylib 5!", 320, 200, 20, textDefaultColor);
+
+        strcpy(buttonMessage, buttonMessageBase);
+        if (GuiButton((Rectangle){ 320, 240, 145, 45 }, strcat(buttonMessage, countStr))) {
+          printf("INFO: COUNT BUTTON PRESSED!\n");
+          snprintf(countStr, sizeof(countStr), "%d", ++count);
+        }
+      EndDrawing();
+    }
   CloseWindow();
 
   return 0;
