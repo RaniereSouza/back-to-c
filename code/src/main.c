@@ -46,7 +46,7 @@ int main(void) {
 
         strcpy(buttonMessage, buttonMessageBase);
         if (GuiButton((Rectangle){ 320, 240, 145, 45 }, strcat(buttonMessage, countStr))) {
-          printf("INFO: COUNT BUTTON PRESSED!\n");
+          printf("DEBUG: COUNT BUTTON PRESSED!\n");
           snprintf(countStr, sizeof(countStr), "%d", ++count);
         }
       EndDrawing();
