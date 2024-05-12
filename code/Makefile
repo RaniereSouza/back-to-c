@@ -32,21 +32,24 @@ help:
 	echo "To document a command, just add a ## comment at the end of the target's line, after the prerequisites"
 #<< Helper definition to print all documented commands [END]
 
-run_main: compile_all link_all ## Execute the entire pipeline to run the code in the src/main.c file
-	./$(BUILD_DIR)/main
+run_main: link_all ## Execute the entire pipeline to run the code in the src/main.c file
+	$(RAYLIB_LIB_PATH_VAR) ./$(BUILD_DIR)/main
 
-run_main_with_raylib: $(RAYLIB_LIB_DIR)/libraylib.so $(RAYLIB_LIB_DIR)/libraygui.so compile_all
+link_all: compile_all ## Link all generated object files inside of the dist/ directory into a main executable file
 	$(C_DEV_COMPILER) -L $(RAYLIB_LIB_DIR) \
-	$$(echo $(BUILD_DIR)/*.o) -o $(BUILD_DIR)/main_with_raylib \
+	$$(echo $(BUILD_DIR)/*.o) -o $(BUILD_DIR)/main \
 	-lraylib -lraygui
-	$(RAYLIB_LIB_PATH_VAR) ./$(BUILD_DIR)/main_with_raylib
+
+compile_all: compile_raylib compile_cfiles ## Compile all C files in src/ and all their needed dependencies and libs
+
+compile_raylib: $(RAYLIB_LIB_DIR)/libraylib.so $(RAYLIB_LIB_DIR)/libraygui.so ## Compile lib files for Raylib and RayGUI
 
 $(RAYLIB_LIB_DIR)/libraylib.so: $(RAYLIB_SRC_DIR)/Makefile
 	mkdir -p $(RAYLIB_LIB_DIR)
 	$(MAKE) -C $(RAYLIB_SRC_DIR) GRAPHICS=GRAPHICS_API_OPENGL_11 RAYLIB_RELEASE_PATH=../lib RAYLIB_LIBTYPE=SHARED
 
-clean_raylib_lib:
-	rm -rf $(RAYLIB_LIB_DIR)/
+clean_raylib: ## Clean Raylib generated files
+	rm -f $(RAYLIB_LIB_DIR)/libraylib.so
 
 $(RAYLIB_LIB_DIR)/libraygui.so: $(RAYGUI_SRC_DIR)/raygui.h $(RAYLIB_LIB_DIR)/libraylib.so
 	cp $(RAYGUI_SRC_DIR)/raygui.h $(RAYLIB_SRC_DIR)/raygui.h
@@ -56,14 +59,15 @@ $(RAYLIB_LIB_DIR)/libraygui.so: $(RAYGUI_SRC_DIR)/raygui.h $(RAYLIB_LIB_DIR)/lib
 	-shared -fpic -DRAYGUI_IMPLEMENTATION -lraylib \
 	-lGL -lm -lpthread -ldl -lrt -lX11
 
-clean_raygui:
+clean_raygui: ## Clean RayGUI generated files
 	rm -f $(RAYLIB_LIB_DIR)/libraygui.so
 	rm -f $(RAYLIB_SRC_DIR)/raygui.c
 	rm -f $(RAYLIB_SRC_DIR)/raygui.h
 
-clean_all_raylib: clean_raygui clean_raylib_lib
+clean_all_raylib: clean_raygui clean_raylib ## Clean Raylib's (and its additional modules) generated files and directories
+	rm -rf $(RAYLIB_LIB_DIR)/
 
-compile_all: ## Compile all C files inside of src/ into a respective object file inside of dist/
+compile_cfiles: ## Compile each C file inside of src/ into a respective object file inside of dist/
 	for source_file in $(CODE_DIR)/*.c; do\
 		make $(BUILD_DIR)/$$(echo $${source_file} | grep -Po '$(CODE_DIR)/\K[\w]*(?#.c)').o -s;\
 	done
@@ -74,9 +78,6 @@ $(BUILD_DIR)/%.o: $(CODE_DIR)/%.c create_dist ## Compile the src/<name>.c file i
 
 create_dist: ## Create the dist/ directory if it doesn't exist
 	mkdir -p $(BUILD_DIR)
-
-link_all: ## Link all generated object files inside of the dist/ directory into a main executable file
-	$(C_DEV_COMPILER) $$(echo $(BUILD_DIR)/*.o) -o $(BUILD_DIR)/main
 
 clean_dist: ## Clean up all files generated inside of the dist/ directory
 	rm -rf $(BUILD_DIR)/
@@ -102,11 +103,14 @@ create_deps: ## Create the deps/ directory if it doesn't exist
 clean_deps: ## Clean up all dependencies downloaded to the deps/ directory
 	rm -rf $(DEPS_DIR)/
 
-include_dynamic_array: $(CODE_DIR)/dynamic_array.c
-	echo "-include $(CODE_DIR)/dynamic_array.c"
+### TODO: run_all_tests doesn't work with the verbosity ("V=1") turned on, gotta fix this
+run_all_tests: $(UNITY_MAIN_FILE) ## Run all test files in the tests/ directory
+	for test_file in $(TESTS_DIR)/*.test.c; do\
+		$(MAKE) test_$$(basename $${test_file} .test.c);\
+	done
 
-include_fibonacci: $(CODE_DIR)/fibonacci.c
-	echo "$(shell $(MAKE) include_dynamic_array) -include $(CODE_DIR)/fibonacci.c"
+test_%: $(CODE_DIR)/%.c $(TESTS_DIR)/%.test.out ## Use test_<name> to run tests in tests/<name>.test.c for src/<name>.c
+	./$(TESTS_DIR)/$*.test.out
 
 $(TESTS_DIR)/%.test.out: $(UNITY_MAIN_FILE) $(TESTS_DIR)/%.test.c
 	$(C_DEV_COMPILER) \
@@ -115,14 +119,11 @@ $(TESTS_DIR)/%.test.out: $(UNITY_MAIN_FILE) $(TESTS_DIR)/%.test.c
 	-o $(TESTS_DIR)/$*.test.out \
 	$(TESTS_DIR)/$*.test.c
 
-test_%: $(CODE_DIR)/%.c $(TESTS_DIR)/%.test.out ## Use test_<name> to run tests in tests/<name>.test.c for src/<name>.c
-	./$(TESTS_DIR)/$*.test.out
+include_dynamic_array: $(CODE_DIR)/dynamic_array.c
+	echo "-include $(CODE_DIR)/dynamic_array.c"
 
-### TODO: run_all_tests doesn't work with the verbosity ("V=1") turned on, gotta fix this
-run_all_tests: $(UNITY_MAIN_FILE) ## Run all test files in the tests/ directory
-	for test_file in $(TESTS_DIR)/*.test.c; do\
-		$(MAKE) test_$$(basename $${test_file} .test.c);\
-	done
+include_fibonacci: $(CODE_DIR)/fibonacci.c
+	echo "$(shell $(MAKE) include_dynamic_array) -include $(CODE_DIR)/fibonacci.c"
 
 clean_tests: ## Clean up all output files in the tests/ directory
 	rm -rf $(TESTS_DIR)/*.test.out
