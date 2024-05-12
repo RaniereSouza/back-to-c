@@ -10,6 +10,8 @@ Devcontainer environment that I made to get back in contact with C and C++: expe
 
 ## 3rd party depencencies
 - [ThrowTheSwitch/Unity](https://www.throwtheswitch.org/unity) - Used for Unit Testing in C
+- [Raylib](https://www.raylib.com/) - Used to facilitate graphics implementation
+  - [RayGUI](https://github.com/raysan5/raygui) - External Raylib additional module that implements common UI elements
 
 ## How to run
 - In the command line, `cd` into the `code/` folder
