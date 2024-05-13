@@ -38,6 +38,10 @@ int fibonacci_memo(int n) {
   int_array_push(1, &memo);
   int_array_push(1, &memo);
 
-  if ((n == 0) || (n == 1)) return int_array_get(n, &memo);
-  return __fib_memo_rec(n, &memo);
+  int result;
+  if ((n == 0) || (n == 1)) result = int_array_get(n, &memo);
+  else result = __fib_memo_rec(n, &memo);
+
+  int_array_clean(&memo);
+  return result;
 }

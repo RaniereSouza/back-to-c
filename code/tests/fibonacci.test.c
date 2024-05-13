@@ -77,11 +77,11 @@ void memo_should_not_accept_negative_input(void) {
 
 int main(void) {
   UNITY_BEGIN();
-  RUN_TEST(rec_should_return_one);
-  RUN_TEST(rec_should_compute_fibonacci_correctly);
-  RUN_TEST(rec_should_not_accept_negative_input);
-  RUN_TEST(memo_should_return_one);
-  RUN_TEST(memo_should_compute_fibonacci_correctly);
-  RUN_TEST(memo_should_not_accept_negative_input);
+    RUN_TEST(rec_should_return_one);
+    RUN_TEST(rec_should_compute_fibonacci_correctly);
+    RUN_TEST(rec_should_not_accept_negative_input);
+    RUN_TEST(memo_should_return_one);
+    RUN_TEST(memo_should_compute_fibonacci_correctly);
+    RUN_TEST(memo_should_not_accept_negative_input);
   return UNITY_END();
 }

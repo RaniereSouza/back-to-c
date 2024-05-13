@@ -38,3 +38,11 @@ int int_array_get(int index, IntArray* array) {
 
   return array->ptr[index];
 }
+
+void int_array_clean(IntArray* array) {
+  if (array->len) array->len = 0;
+  if (array->ptr != NULL) {
+    free(array->ptr);
+    array->ptr = NULL;
+  }
+}

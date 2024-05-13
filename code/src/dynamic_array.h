@@ -18,7 +18,7 @@
 /**
  * Represents a dynamic array of int and it's length
  */
-typedef struct {
+typedef struct IntArray {
   int *ptr;
   int len;
 } IntArray;
@@ -37,4 +37,9 @@ void int_array_push(int new_item, IntArray* array);
  * Gets the value from a certain index in the array
  */
 int int_array_get(int index, IntArray* array);
+
+/**
+ * Empty the array and free it's allocated memory
+ */
+void int_array_clean(IntArray* array);
 #endif
