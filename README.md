@@ -16,8 +16,13 @@ Devcontainer environment that I made to get back in contact with C and C++: expe
 ## How to run
 - In the command line, `cd` into the `code/` folder
 - To see what each (documented) command does, run `make` or `make help`
-- To just compile the C code from `src/main.c` and all other C files on `src/`, run `make compile_all`
-- To run the C code in `src/main.c` (as well as link all object files needed for that), run `make run_main`
+- To run the C code in `src/main.c` (and prepare everything needed for that), run `make run_main`
+- To link all generated object files and lib files into an executable, run `make link_all`
+- To compile all C files in `src/` (and all needed libs and dependencies), run `make compile_all`
+  - To compile each C file in `src/` into an object file in `dist/`, run `make compile_cfiles`
+    - To clean the entire `dist/` folder, run `make clean_dist`
+  - To compile the lib files for Raylib (and for extra modules like RayGUI), run `make compile_raylib`
+    - To clean all generated lib files for Raylib and it's extra modules, run `make clean_all_raylib`
 - To install all 3rd party dependencies listed in `deps.txt`, run `make install_deps`
   - To clean all installed files from 3rd party dependencies, run `clean_deps`
 - To define the dependency hierarchy of `src/foo.c` for building and testing purposes, write a target called `include_foo` in the Makefile
