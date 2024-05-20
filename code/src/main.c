@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <string.h>
-
 // #include "fibonacci.h"
 //
 // int main() {
@@ -16,8 +13,13 @@
 //   return EXIT_SUCCESS;
 // }
 
+#include <stdio.h>
+#include <string.h>
+
 #include "../deps/raylib_5/src/raylib.h"
 #include "../deps/raylib_5/src/raygui.h"
+
+// #include "fibonacci.h"
 
 #define MAX_STRING_SIZE 255
 
@@ -34,7 +36,8 @@ int main(void) {
   char countStr[3];
   snprintf(countStr, sizeof(countStr), "%d", count);
   char buttonMessageBase[MAX_STRING_SIZE] = "CLICK COUNT: ";
-  char buttonMessage[MAX_STRING_SIZE] = "";
+  char buttonMessage[MAX_STRING_SIZE];
+  char inputText[MAX_STRING_SIZE];
 
   // GUI
   SetTargetFPS(fps);
@@ -42,12 +45,20 @@ int main(void) {
     while (!WindowShouldClose()) {
       BeginDrawing();
         ClearBackground(windowBgColor);
-        DrawText("Hello, Raylib 5!", 320, 200, 20, textDefaultColor);
+        DrawText("Hello, Raylib 5!", 330, 160, 20, textDefaultColor);
 
         strcpy(buttonMessage, buttonMessageBase);
-        if (GuiButton((Rectangle){ 320, 240, 145, 45 }, strcat(buttonMessage, countStr))) {
-          printf("DEBUG: COUNT BUTTON PRESSED!\n");
+        strcat(buttonMessage, countStr);
+        if (GuiButton((Rectangle){ 330, 200, 145, 45 }, buttonMessage)) {
+          printf("DEBUG: count button pressed!\n");
           snprintf(countStr, sizeof(countStr), "%d", ++count);
+        }
+
+        if (
+          GuiTextBox((Rectangle){ 330, 260, 145, 45 }, inputText, MAX_STRING_SIZE, true)
+          && IsKeyPressed(KEY_ENTER)
+        ) {
+          printf("DEBUG: text input content is \"%s\"\n", inputText);
         }
       EndDrawing();
     }
