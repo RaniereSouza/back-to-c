@@ -5,68 +5,68 @@ void setUp(void) {}
 
 void tearDown(void) {}
 
-void it_should_create_push_and_get() {
+void itShouldCreatePushAndGet() {
   // Arrange
-  IntArray arr = create_int_array();
+  IntArray arr = createIntArray();
   // Assert
   TEST_ASSERT_EQUAL_INT(0, arr.len);
   TEST_ASSERT(arr.ptr == NULL);
   // Act
-  int_array_push(42, &arr);
+  intArrayPush(42, &arr);
   // Assert
   TEST_ASSERT_EQUAL_INT(1, arr.len);
-  TEST_ASSERT_EQUAL_INT(42, int_array_get(0, &arr));
+  TEST_ASSERT_EQUAL_INT(42, intArrayGet(0, &arr));
   //Act
-  int_array_push(69, &arr);
-  int_array_push(13, &arr);
+  intArrayPush(69, &arr);
+  intArrayPush(13, &arr);
   // Assert
   TEST_ASSERT_EQUAL_INT(3, arr.len);
-  TEST_ASSERT_EQUAL_INT(69, int_array_get(1, &arr));
-  TEST_ASSERT_EQUAL_INT(13, int_array_get(2, &arr));
+  TEST_ASSERT_EQUAL_INT(69, intArrayGet(1, &arr));
+  TEST_ASSERT_EQUAL_INT(13, intArrayGet(2, &arr));
 }
 
-void it_should_not_get_from_empty_array() {
+void itShouldNotGetFromEmptyArray() {
   // Arrange
-  IntArray arr = create_int_array();
+  IntArray arr = createIntArray();
   // Act
-  int result = int_array_get(0, &arr);
+  int result = intArrayGet(0, &arr);
   // Assert
   TEST_ASSERT_EQUAL_INT(ACCESS_EMPTY_ARR_ERRNO, result);
 }
 
-void it_should_not_get_out_of_range_index() {
+void itShouldNotGetOutOfRangeIndex() {
   // Arrange
-  IntArray arr = create_int_array();
-  int_array_push(42, &arr);
+  IntArray arr = createIntArray();
+  intArrayPush(42, &arr);
   // Act
-  int result = int_array_get(1, &arr);
+  int result = intArrayGet(1, &arr);
   // Assert
   TEST_ASSERT_EQUAL_INT(OUT_OF_RANGE_ARR_ERRNO, result);
 }
 
-void it_should_not_get_negative_index() {
+void itShouldNotGetNegativeIndex() {
   // Arrange
-  IntArray arr = create_int_array();
-  int_array_push(42, &arr);
+  IntArray arr = createIntArray();
+  intArrayPush(42, &arr);
   // Act
-  int result = int_array_get(-1, &arr);
+  int result = intArrayGet(-1, &arr);
   // Assert
   TEST_ASSERT_EQUAL_INT(NEGATIVE_INDEX_ARR_ERRNO, result);
 }
 
-void it_should_clear_the_array() {
+void itShouldClearTheArray() {
   // Arrange
-  IntArray arr = create_int_array();
-  int_array_push(42, &arr);
-  int_array_push(69, &arr);
-  int_array_push(13, &arr);
+  IntArray arr = createIntArray();
+  intArrayPush(42, &arr);
+  intArrayPush(69, &arr);
+  intArrayPush(13, &arr);
   // Assert
   TEST_ASSERT_EQUAL_INT(3, arr.len);
-  TEST_ASSERT_EQUAL_INT(42, int_array_get(0, &arr));
-  TEST_ASSERT_EQUAL_INT(69, int_array_get(1, &arr));
-  TEST_ASSERT_EQUAL_INT(13, int_array_get(2, &arr));
+  TEST_ASSERT_EQUAL_INT(42, intArrayGet(0, &arr));
+  TEST_ASSERT_EQUAL_INT(69, intArrayGet(1, &arr));
+  TEST_ASSERT_EQUAL_INT(13, intArrayGet(2, &arr));
   // Act
-  int_array_clean(&arr);
+  intArrayClean(&arr);
   // Assert
   TEST_ASSERT_EQUAL_INT(0, arr.len);
   TEST_ASSERT(arr.ptr == NULL);
@@ -74,10 +74,10 @@ void it_should_clear_the_array() {
 
 int main(void) {
   UNITY_BEGIN();
-    RUN_TEST(it_should_create_push_and_get);
-    RUN_TEST(it_should_not_get_from_empty_array);
-    RUN_TEST(it_should_not_get_out_of_range_index);
-    RUN_TEST(it_should_not_get_negative_index);
-    RUN_TEST(it_should_clear_the_array);
+    RUN_TEST(itShouldCreatePushAndGet);
+    RUN_TEST(itShouldNotGetFromEmptyArray);
+    RUN_TEST(itShouldNotGetOutOfRangeIndex);
+    RUN_TEST(itShouldNotGetNegativeIndex);
+    RUN_TEST(itShouldClearTheArray);
   return UNITY_END();
 }

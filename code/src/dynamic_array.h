@@ -26,20 +26,20 @@ typedef struct IntArray {
 /**
  * Creates an empty dynamic array of int
  */
-IntArray create_int_array();
+IntArray createIntArray();
 
 /**
  * Pushes a new int into the last position of the array
  */
-void int_array_push(int new_item, IntArray* array);
+void intArrayPush(int newItem, IntArray* array);
 
 /**
  * Gets the value from a certain index in the array
  */
-int int_array_get(int index, IntArray* array);
+int intArrayGet(int index, IntArray* array);
 
 /**
  * Empty the array and free it's allocated memory
  */
-void int_array_clean(IntArray* array);
+void intArrayClean(IntArray* array);
 #endif

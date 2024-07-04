@@ -3,7 +3,7 @@
 
 #include "dynamic_array.h"
 
-IntArray create_int_array() {
+IntArray createIntArray() {
   IntArray array;
 
   array.ptr = NULL;
@@ -12,15 +12,15 @@ IntArray create_int_array() {
   return array;
 }
 
-void int_array_push(int new_item, IntArray* array) {
+void intArrayPush(int newItem, IntArray* array) {
   if (array->ptr == NULL) array->ptr = (int*) malloc(sizeof(int));
   else array->ptr = (int*) realloc(array->ptr, (array->len + 1) * sizeof(int));
 
-  array->ptr[array->len] = new_item;
+  array->ptr[array->len] = newItem;
   array->len++;
 }
 
-int int_array_get(int index, IntArray* array) {
+int intArrayGet(int index, IntArray* array) {
   if (index < 0) {
     fprintf(stderr, "[ERROR] tried to access a negative index in the array.\n");
     return NEGATIVE_INDEX_ARR_ERRNO;
@@ -39,7 +39,7 @@ int int_array_get(int index, IntArray* array) {
   return array->ptr[index];
 }
 
-void int_array_clean(IntArray* array) {
+void intArrayClean(IntArray* array) {
   if (array->len) array->len = 0;
   if (array->ptr != NULL) {
     free(array->ptr);

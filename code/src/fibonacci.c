@@ -4,7 +4,7 @@
 #include "dynamic_array.h"
 #include "fibonacci.h"
 
-int fibonacci_rec(int n) {
+int fibonacciRec(int n) {
   if (n < 0) {
     fprintf(
       stderr,
@@ -14,17 +14,17 @@ int fibonacci_rec(int n) {
     return INVALID_INPUT_ERRNO;
   }
   if ((n == 0) || (n == 1)) return 1;
-  return fibonacci_rec(n - 1) + fibonacci_rec(n - 2);
+  return fibonacciRec(n - 1) + fibonacciRec(n - 2);
 }
 
-int __fib_memo_rec(int n, IntArray *memo) {
+int __fibMemoRec(int n, IntArray *memo) {
   if (n >= memo->len) {
-    int_array_push(__fib_memo_rec(n - 1, memo) + __fib_memo_rec(n - 2, memo), memo);
+    intArrayPush(__fibMemoRec(n - 1, memo) + __fibMemoRec(n - 2, memo), memo);
   }
-  return int_array_get(n, memo);
+  return intArrayGet(n, memo);
 }
 
-int fibonacci_memo(int n) {
+int fibonacciMemo(int n) {
   if (n < 0) {
     fprintf(
       stderr,
@@ -34,14 +34,14 @@ int fibonacci_memo(int n) {
     return INVALID_INPUT_ERRNO;
   }
 
-  IntArray memo = create_int_array();
-  int_array_push(1, &memo);
-  int_array_push(1, &memo);
+  IntArray memo = createIntArray();
+  intArrayPush(1, &memo);
+  intArrayPush(1, &memo);
 
   int result;
-  if ((n == 0) || (n == 1)) result = int_array_get(n, &memo);
-  else result = __fib_memo_rec(n, &memo);
+  if ((n == 0) || (n == 1)) result = intArrayGet(n, &memo);
+  else result = __fibMemoRec(n, &memo);
 
-  int_array_clean(&memo);
+  intArrayClean(&memo);
   return result;
 }
