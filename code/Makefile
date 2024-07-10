@@ -22,11 +22,11 @@ UNITY_MAIN_FILE := $(UNITY_SRC_DIR)/unity.c
 
 #>> Helper definition to print all documented commands (based on https://diamantidis.github.io/tips/2020/07/01/list-makefile-targets)
 .DEFAULT_GOAL := help
-.PHONY: help
+.PHONY: help run_main link_all compile_all compile_raylib clean_raylib clean_raygui clean_all_raylib compile_cfiles create_dist clean_dist include_dynamic_array include_fibonacci install_deps create_deps clean_deps run_all_tests test_% clean_tests clean_all
 
-help:
+help: ## Show info about described targets/commands
 	echo "List of available (documented) commands:"
-	grep -Po '^[a-zA-Z0-9_-|\/|\%|\.]+:.*?## .*$$' $(MAKEFILE_LIST) \
+	grep -Po '^[a-zA-Z0-9|_|-|/|$$|(|)|%|\.]+:.*?## .*$$' $(MAKEFILE_LIST) \
 	| sed -n 's/^\(.*\): \(.*\)##\(.*\)/  \1##←\3/p' \
 	| column -t -s '##'
 	echo "To document a command, just add a ## comment at the end of the target's line, after the prerequisites"
@@ -72,7 +72,6 @@ compile_cfiles: ## Compile each C file inside of src/ into a respective object f
 		make $(BUILD_DIR)/$$(echo $${source_file} | grep -Po '$(CODE_DIR)/\K[\w]*(?#.c)').o -s;\
 	done
 
-### TODO: the target below doesn't have its documentation shown anymore, gotta fix this
 $(BUILD_DIR)/%.o: $(CODE_DIR)/%.c create_dist ## Compile the src/<name>.c file into the dist/<name>.o file
 	$(C_DEV_COMPILER) -c $< -o $@
 
@@ -103,7 +102,12 @@ create_deps: ## Create the deps/ directory if it doesn't exist
 clean_deps: ## Clean up all dependencies downloaded to the deps/ directory
 	rm -rf $(DEPS_DIR)/
 
-### TODO: run_all_tests doesn't work with the verbosity ("V=1") turned on, gotta fix this
+include_dynamic_array: $(CODE_DIR)/dynamic_array.c
+	@echo "-include $(CODE_DIR)/dynamic_array.c"
+
+include_fibonacci: $(CODE_DIR)/fibonacci.c
+	@echo "$(shell $(MAKE) include_dynamic_array) -include $(CODE_DIR)/fibonacci.c"
+
 run_all_tests: $(UNITY_MAIN_FILE) ## Run all test files in the tests/ directory
 	for test_file in $(TESTS_DIR)/*.test.c; do\
 		$(MAKE) test_$$(basename $${test_file} .test.c);\
@@ -118,12 +122,6 @@ $(TESTS_DIR)/%.test.out: $(UNITY_MAIN_FILE) $(TESTS_DIR)/%.test.c
 	$(shell $(MAKE) include_$*) \
 	-o $(TESTS_DIR)/$*.test.out \
 	$(TESTS_DIR)/$*.test.c
-
-include_dynamic_array: $(CODE_DIR)/dynamic_array.c
-	echo "-include $(CODE_DIR)/dynamic_array.c"
-
-include_fibonacci: $(CODE_DIR)/fibonacci.c
-	echo "$(shell $(MAKE) include_dynamic_array) -include $(CODE_DIR)/fibonacci.c"
 
 clean_tests: ## Clean up all output files in the tests/ directory
 	rm -rf $(TESTS_DIR)/*.test.out

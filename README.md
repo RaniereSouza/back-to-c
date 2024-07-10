@@ -35,4 +35,5 @@ Devcontainer environment that I made to get back in contact with C and C++: expe
 > Obs. 1: The contents generated from default compilation will be in the `dist/` folder
 > Obs. 2: The downloaded contents for 3rd party dependencies will be in the `deps/` folder
 > Obs. 3: The files for testing purposes will be in the `tests/` folder
-> Obs. 4: If you want the commands in the Makefile targets to be shown in the command line, pass the argument `V=1` to the `make` command for verbosity (`make V=1 (...)` or `make (...) V=1`, for example; this verbosity argument doesn't work well for some commands, so it still needs some fixing)
+> Obs. 4: If you want the commands in the Makefile targets to be shown in the command line, pass the argument `V=1` to the `make` command for verbosity (`make V=1 (...)` or `make (...) V=1`, for example
+> Obs. 5: The `V=1` verbosity option may unintentionally break some commands, for example those commands with other nested makefile commands (the nested ones might concatenate unexpected text to the caller ones when using `V=1`); a known case is nested makefile commands that use `echo` only to generate some text, they should use `@echo` instead to avoid adding unexpected text to whoever is calling them while `V=1` is in action)
