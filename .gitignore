@@ -1,3 +1,13 @@
+# Automatically generated files
 /code/dist
 /code/deps
 /code/tests/*.out
+
+# Local only
+*.local*
+.env*
+drafts/
+
+# Exceptions
+!.env.example
+!.env.test
