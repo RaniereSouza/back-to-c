@@ -11,7 +11,7 @@ int fibonacciRec(int n) {
       "[ERROR] argument for Fibonacci should be a positive integer, received %d.\n",
       n
     );
-    return INVALID_INPUT_ERRNO;
+    return NEGATIVE_INPUT_ERRNO;
   }
   if ((n == 0) || (n == 1)) return 1;
   return fibonacciRec(n - 1) + fibonacciRec(n - 2);
@@ -31,7 +31,7 @@ int fibonacciMemo(int n) {
       "[ERROR] argument for Fibonacci should be a positive integer, received %d.\n",
       n
     );
-    return INVALID_INPUT_ERRNO;
+    return NEGATIVE_INPUT_ERRNO;
   }
 
   IntArray memo = createIntArray();

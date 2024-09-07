@@ -37,7 +37,7 @@ void recShouldNotAcceptNegativeInput(void) {
   // Act
   int result1 = fibonacciRec(input1);
   // Assert
-  TEST_ASSERT_EQUAL_INT(INVALID_INPUT_ERRNO, result1);
+  TEST_ASSERT_EQUAL_INT(NEGATIVE_INPUT_ERRNO, result1);
 }
 
 void memoShouldReturnOne(void) {
@@ -72,7 +72,7 @@ void memoShouldNotAcceptNegativeInput(void) {
   // Act
   int result1 = fibonacciMemo(input1);
   // Assert
-  TEST_ASSERT_EQUAL_INT(INVALID_INPUT_ERRNO, result1);
+  TEST_ASSERT_EQUAL_INT(NEGATIVE_INPUT_ERRNO, result1);
 }
 
 int main(void) {

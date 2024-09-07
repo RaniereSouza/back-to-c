@@ -7,7 +7,7 @@
 //   scanf("%d", &input);
 //
 //   int result = fibonacciMemo(input);
-//   if (result == INVALID_INPUT_ERRNO) return EXIT_FAILURE;
+//   if (result == NEGATIVE_INPUT_ERRNO) return EXIT_FAILURE;
 //
 //   printf("the #%d Fibonacci number is the number %d.\n", input, result);
 //   return EXIT_SUCCESS;
