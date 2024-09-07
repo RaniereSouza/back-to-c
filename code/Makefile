@@ -22,7 +22,7 @@ UNITY_MAIN_FILE := $(UNITY_SRC_DIR)/unity.c
 
 #>> Helper definition to print all documented commands (based on https://diamantidis.github.io/tips/2020/07/01/list-makefile-targets)
 .DEFAULT_GOAL := help
-.PHONY: help run_main link_all compile_all compile_raylib clean_raylib clean_raygui clean_all_raylib compile_cfiles create_dist clean_dist include_dynamic_array include_fibonacci install_deps create_deps clean_deps run_all_tests test_% clean_tests clean_all
+.PHONY: help
 
 help: ## Show info about described targets/commands
 	echo "List of available (documented) commands:"
@@ -31,6 +31,8 @@ help: ## Show info about described targets/commands
 	| column -t -s '##'
 	echo "To document a command, just add a ## comment at the end of the target's line, after the prerequisites"
 #<< Helper definition to print all documented commands [END]
+
+.PHONY: run_main link_all compile_all compile_raylib clean_raylib clean_raygui clean_all_raylib compile_cfiles create_dist clean_dist include_dynamic_array include_fibonacci install_deps create_deps clean_deps run_all_tests test_% clean_tests clean_all
 
 run_main: link_all ## Execute the entire pipeline to run the code in the src/main.c file
 	$(RAYLIB_LIB_PATH_VAR) ./$(BUILD_DIR)/main
