@@ -39,7 +39,7 @@ run_main: link_all ## Execute the entire pipeline to run the code in the src/mai
 
 link_all: compile_all ## Link all generated object files inside of the dist/ directory into a main executable file
 	$(C_DEV_COMPILER) -L $(RAYLIB_LIB_DIR) \
-	$$(echo $(BUILD_DIR)/*.o) -o $(BUILD_DIR)/main \
+	$(BUILD_DIR)/*.o -o $(BUILD_DIR)/main \
 	-lraylib -lraygui
 
 compile_all: compile_raylib compile_cfiles ## Compile all C files in src/ and all their needed dependencies and libs

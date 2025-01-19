@@ -1,6 +1,5 @@
 FROM mcr.microsoft.com/devcontainers/cpp:bullseye
 
-# the `cargo generate` command accused that $USER was missing
 ENV USER=root
 
 RUN apt-get update
