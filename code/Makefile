@@ -48,7 +48,7 @@ compile_raylib: $(RAYLIB_LIB_DIR)/libraylib.so $(RAYLIB_LIB_DIR)/libraygui.so ##
 
 $(RAYLIB_LIB_DIR)/libraylib.so: $(RAYLIB_SRC_DIR)/Makefile
 	mkdir -p $(RAYLIB_LIB_DIR)
-	$(MAKE) -C $(RAYLIB_SRC_DIR) GRAPHICS=GRAPHICS_API_OPENGL_11 RAYLIB_RELEASE_PATH=../lib RAYLIB_LIBTYPE=SHARED
+	$(MAKE) -C $(RAYLIB_SRC_DIR) GRAPHICS=GRAPHICS_API_OPENGL_33 RAYLIB_RELEASE_PATH=../lib RAYLIB_LIBTYPE=SHARED
 
 clean_raylib: ## Clean Raylib generated files
 	rm -f $(RAYLIB_LIB_DIR)/libraylib.so
