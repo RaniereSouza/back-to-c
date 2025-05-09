@@ -1,5 +1,5 @@
 #ifndef __FIBONACCI_MODULE__
-#define __FIBONNACI_MODULE__
+#define __FIBONACCI_MODULE__
 /**
  * Fail output that indicates that a received argument wasn't acceptable
  */
