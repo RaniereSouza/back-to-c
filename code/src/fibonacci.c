@@ -33,15 +33,12 @@ int fibonacciMemo(int n) {
     );
     return NEGATIVE_INPUT_ERRNO;
   }
+  if ((n == 0) || (n == 1)) return 1;
 
   IntArray memo = createIntArray();
-  intArrayPush(1, &memo);
-  intArrayPush(1, &memo);
+  intArrayPush(1, &memo); intArrayPush(1, &memo);
 
-  int result;
-  if ((n == 0) || (n == 1)) result = intArrayGet(n, &memo);
-  else result = __fibMemoRec(n, &memo);
-
+  int result = __fibMemoRec(n, &memo);
   intArrayClean(&memo);
   return result;
 }
