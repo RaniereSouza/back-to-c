@@ -21,6 +21,7 @@ void itShouldCreatePushAndGet() {
   intArrayPush(13, &arr);
   // Assert
   TEST_ASSERT_EQUAL_INT(3, arr.len);
+  TEST_ASSERT_EQUAL_INT(42, intArrayGet(0, &arr));
   TEST_ASSERT_EQUAL_INT(69, intArrayGet(1, &arr));
   TEST_ASSERT_EQUAL_INT(13, intArrayGet(2, &arr));
 }
@@ -70,6 +71,9 @@ void itShouldClearTheArray() {
   // Assert
   TEST_ASSERT_EQUAL_INT(0, arr.len);
   TEST_ASSERT(arr.ptr == NULL);
+  TEST_ASSERT_EQUAL_INT(ACCESS_EMPTY_ARR_ERRNO, intArrayGet(0, &arr));
+  TEST_ASSERT_EQUAL_INT(ACCESS_EMPTY_ARR_ERRNO, intArrayGet(1, &arr));
+  TEST_ASSERT_EQUAL_INT(ACCESS_EMPTY_ARR_ERRNO, intArrayGet(2, &arr));
 }
 
 int main(void) {
